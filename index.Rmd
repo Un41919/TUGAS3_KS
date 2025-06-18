@@ -1,0 +1,708 @@
+---
+title: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(knitr)
+library(kableExtra)
+```
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cantata+One&family=Quicksand:wght@600;700&display=swap');
+
+body {
+  margin-left: 50px;  
+  margin-right: 50px;
+  transition: margin-right 0.3s ease;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16.5px;
+  line-height: 1.6;
+  padding: 0 30px;
+  margin: 0;
+}
+
+blockquote {
+  font-size: 16.5px;
+  font-family: inherit;
+  font-weight: normal;
+  line-height: 1.5;
+  margin-bottom: 1em;
+  color: #333;
+  border-left: 4px solid #cfd0d1;
+}
+
+.card {
+  flex: 1;
+  background-color: #f2f4f6;
+  padding: 7px;
+  padding-left: 15px;
+  margin-left: 5px;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+  color: #2980b9;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.callout-box {
+  background-color: #f2f4f6;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 16.5px;
+  margin-bottom: 30px;
+}
+
+.column-left {
+  padding-right: 60px;
+}
+
+.column-right {
+  padding-left: 40px;
+}
+
+h1,
+.main-title h1 {
+  font-family: 'Cantata One', serif;
+  color: #1f4e79;
+}
+
+.main-title h1 {
+  font-size: 35px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-bottom: 3px solid #1f4e79;
+  padding-bottom: 10px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+h1:not(.main-title h1) {
+  display: flex;
+  align-items: center;
+  font-size: 33px;
+  font-weight: 700;
+  color: #1f4e79;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+h1:not(.main-title h1)::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: #1f4e79;
+  margin-left: 12px;
+  border-radius: 2px;
+}
+
+h2, h3 {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.h3-blue {
+  color: #2980b9;
+}
+
+h2 {
+  color: #2980b9;
+}
+
+code {
+  color: #d63333;
+  background-color: #f2f4f6;
+  font-weight: bold
+}
+
+pre {
+  max-width: 80%;
+  padding: 10px;
+  background-color: #f2f4f6;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre;
+  box-sizing: border-box;
+}
+
+.quote-style {
+  border-left: 4px solid #333;
+  padding-left: 15px;
+  margin-top: 5px;
+  color: #333;
+  font-size: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 15.5px;
+  margin-bottom: 20px;
+}
+
+td {
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #e2e6ea;
+}
+
+td:first-child {
+  background-color: #e3e6e8;
+  font-weight: 600;
+  color: #2b3e50;
+}
+
+th {
+  background-color: #e3e6e8;
+  color: #1f4e79;
+  font-weight: 1000;
+  padding: 10px;
+  border: 1px solid #dcdfe2;
+  text-align: left;
+}
+
+.team-box details {
+  background-color: #f2f4f6;
+  padding: 12px 18px;
+  border-radius: 6px;
+  border-left: 3px solid #cfd0d1;
+  font-family: 'Quicksand', sans-serif;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.team-box summary h2 {
+  display: inline;
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: 600;
+  margin: 0;
+}
+
+.team-box ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.team-box li {
+  font-size: 15.5px;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.two-columns {
+  display: flex;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+body.sidebar-open {
+  margin-right: 300px; 
+}
+
+.sidebar-controller {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.controller-box {
+  width: 250px;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.controller-header {
+  background-color: #1f4e79;
+  color: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.controller-title {
+  font-weight: 700;
+  margin: 0;
+  font-size: 16px;
+}
+
+.controller-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.controller-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.controller-content.collapsed {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.controller-item {
+  padding: 8px 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  transition: all 0.2s ease;
+  color: #2b3e50;
+  border-left: 3px solid transparent;
+  font-size: 14px;
+}
+
+.controller-item:hover {
+  background-color: #e6f0fa;
+  border-left: 3px solid #2980b9;
+  color: #1f4e79;
+}
+
+.controller-item.active {
+  background-color: #e6f0fa;
+  border-left: 3px solid #1f4e79;
+  font-weight: 600;
+}
+
+.sidebar-controller.minimized .controller-box {
+  width: 50px;
+}
+
+.sidebar-controller.minimized .controller-title,
+.sidebar-controller.minimized .controller-content {
+  display: none;
+}
+
+.sidebar-controller.minimized .controller-toggle {
+  transform: rotate(180deg);
+  margin: 0 auto;
+}
+
+.controller-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.controller-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.controller-content::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}
+
+.controller-content::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+@media (max-width: 768px) {
+  .two-columns {
+    flex-direction: column;
+  }
+}
+</style>
+
+
+
+<div class="main-title">
+  <h1>FOR VS WHILE</h1>
+</div>
+
+<div class="team-box">
+  <details>
+    <summary><h2><b>👩‍💻 Team 5</b></h2></summary>
+    <ul>
+      <li><strong><b>Nailul Muna</b></strong> (23611094)</li>
+      <li><strong><b>Muhammad Alwi Harda Brilliyantoro</b></strong> (23611084)</li>
+      <li><strong><b>Amelia Miska Permatasari</b></strong> (23611111)</li>
+    </ul>
+  </details>
+</div>
+
+
+
+# Pendahuluan
+
+<div class="callout-box">
+
+::: columns
+
+::: {.column width="50% column-left"}
+
+#### **Apa itu iterasi?**
+
+>Dalam dunia pemrograman dan komputasi, iterasi adalah proses mengulang serangkaian instruksi atau operasi sebanyak beberapa kali, baik dengan jumlah pengulangan yang telah diketahui atau berdasarkan suatu kondisi tertentu (Franke, 1988).
+>
+
+:::
+
+::: {.column width="50% column-right"}
+
+#### **Mengapa penting?**
+
+Iterasi memungkinkan kita untuk:
+
+- Menyederhanakan pekerjaan berulang.  
+- Memproses data dalam jumlah besar.  
+- Menghindari penulisan kode yang panjang dan berulang.
+
+:::
+
+:::
+
+</div>
+
+# Konsep Iterasi
+
+<div class="two-columns"> <div class="card"> <h3><b>Pengertian</b></h3> <p>Iterasi adalah struktur kontrol dalam pemrograman yang digunakan untuk mengeksekusi blok kode secara berulang hingga kondisi tertentu terpenuhi (Kulkarni, 2022).</p> </div> <div class="card"> <h3><b>Fungsi utama iterasi</b></h3> <ul> <li>Efisiensi dalam coding.</li> <li>Mengotomatisasi proses berulang.</li> <li>Menghindari kesalahan manual.</li> </ul> </div> </div>
+
+### <span class="h3-blue">**Beberapa Peran Iterasi dalam Komputasi Statistika**</span>
+
+✅ Untuk pengulangan perhitungan statistik, seperti rata-rata bergerak, uji berulang, atau evaluasi model.
+
+✅ Digunakan dalam simulasi statistik, seperti *bootstrap* atau *Monte Carlo*.
+
+✅ Berguna dalam memproses data besar secara otomatis, baris demi baris atau dalam *batch*.
+
+
+
+
+::: columns
+
+::: {.column width="50% column-left"}
+
+### **`For` Loop**
+
+**Pengertian:**  
+`For` loop digunakan saat jumlah pengulangan sudah diketahui.
+
+**Struktur kode:**
+
+```r
+for (i in 1:5) {
+  print(i)
+}
+```
+
+**Kelebihan:**  
+- Ringkas dan mudah dibaca.  
+- Cocok untuk struktur data seperti vector dan list.  
+- Ideal untuk pengolahan data berukuran tetap.
+
+:::
+
+::: {.column width="50% column-right"}
+
+### **`While` Loop**
+
+**Pengertian:**  
+`While` loop digunakan ketika pengulangan didasarkan pada kondisi logika.
+
+**Struktur kode:**
+
+```r
+i <- 1
+while (i <= 5) {
+  print(i)
+  i <- i + 1
+}
+```
+
+**Kelebihan:**  
+- Sangat fleksibel.  
+- Cocok untuk input dinamis, validasi, atau proses simulasi dengan kondisi.
+
+:::
+
+:::
+
+
+# For VS While
+```{r mytable, echo=FALSE, results='asis'}
+library(knitr)
+library(kableExtra)
+
+# 1. Buat data frame dan simpan ke df
+df <- data.frame(
+  Aspek = c(
+    "Kontrol", "Kapan digunakan", "Risiko infinite loop", "Fleksibilitas",
+    "Kelebihan", "Contoh penggunaan", "Contoh kasus"
+  ),
+  `For Loop` = c(
+    "Jumlah iterasi tetap",
+    "Saat iterasi pasti (misal: 1–100)",
+    "Rendah",
+    "Terbatas karena harus menetapkan jumlah percobaan",
+    "Dapat diatur dengan batasan percobaan yang pasti",
+    "Traverse vector, <em>matriks</em>",
+    "Pengulangan dengan jumlah iterasi tetap"
+  ),
+  `While Loop` = c(
+    "Berdasarkan kondisi logika",
+    "Saat belum tahu kapan selesai",
+    "Tinggi <em>jika kondisi tak dikontrol</em>",
+    "Lebih fleksibel karena menunggu kondisi benar",
+    "Lebih cocok untuk kondisi yang tidak pasti",
+    "Validasi input, simulasi dinamis",
+    "Menunggu input valid dari user"
+  ),
+  check.names = FALSE
+)
+
+# 2. Ganti nama kolomnya (tanpa pipe)
+colnames(df) <- c(
+  "Aspek",
+  "<code>For</code> Loop",
+  "<code>While</code> Loop"
+)
+
+# 3. Pipe ke kbl & styling
+df |>
+  kbl(escape = FALSE, format = "html", align = "l") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover"),
+    full_width = TRUE,
+    position = "center"
+  )
+```
+
+
+# Contoh Penggunaan
+::: columns
+
+::: {.column width="50% column-left card"}
+
+#### <u>**Kasus 1: Jumlahkan angka 1 sampai 5**</u>
+
+#### 1. Menggunakan `For`
+
+```r
+total <- 0
+for (i in 1:5) {
+  total <- total + i
+}
+print(total)
+```
+
+#### 2. Menggunakan `While`
+
+```r
+total <- 0
+i <- 1
+while (i <= 5) {
+  total <- total + i
+  i <- i + 1
+}
+print(total)
+```
+
+✅ Sama-sama benar tapi `While` sedikit lebih panjang.
+
+**Kesimpulan Kasus 1:**  
+Keduanya bisa menyelesaikan masalah yang sama, namun `for` 
+lebih disarankan di kasus seperti ini karena lebih ringkas.
+
+:::
+
+::: {.column width="50% column-right card"}
+
+#### <u>**Kasus 2: Validasi input angka positif dari user**</u>
+
+#### 1. Menggunakan `For`
+
+```r
+for (i in 1:100) {  # Asumsi maksimal 100 percobaan
+  angka <- as.integer(readline("Masukkan bilangan positif: "))
+  if (angka > 0) {
+    break
+  }
+}
+cat("Angka valid:", angka, "\n")
+```
+
+#### 2. Menggunakan `While`
+
+```r
+angka <- -1
+while (angka <= 0) {
+  angka <- as.integer(readline("Masukkan bilangan positif: "))
+}
+cat("Angka valid:", angka, "\n")
+```
+
+**Kesimpulan Kasus 2:**
+
+- Karena kita nggak tahu berapa kali user akan salah input.
+- Proses akan terus berjalan hingga input memenuhi kondisi yang benar.
+
+:::
+
+:::
+
+
+# Keimpulan
+- Iterasi adalah komponen penting dalam pemrograman dan komputasi statistika.
+- `For` cocok untuk perulangan dengan jumlah pasti dan terkontrol.
+- `While` ideal untuk proses berbasis kondisi dinamis.
+- Dalam statistika, iterasi berperan dalam:
+  
+  - Pengulangan perhitungan,  
+  - Simulasi statistik,  
+  - Analisis data besar,  
+  - Dan berbagai algoritma komputasi kompleks.
+  
+
+# Sumber
+
+- Franke, R., 1988. *Statistical Interpolation by Iteration*. Monthly Weather Review. Available at: [https://scispace.com/papers/statistical-interpolation-by-iteration-1l8nw3xx6a?](https://scispace.com/papers/statistical-interpolation-by-iteration-1l8nw3xx6a?) [Accessed 13 June 2025].
+
+- Kulkarni, R., 2022. *Modeling iteration’s perspectives in software engineering*. IEEE Access. Available at: [https://scispace.com/papers/modeling-iterations-perspectives-in-software-engineering-3bc6cm6v?](https://scispace.com/papers/modeling-iterations-perspectives-in-software-engineering-3bc6cm6v?) [Accessed 13 June 2025].
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Create sidebar element
+  const sidebar = document.createElement('div');
+  sidebar.className = 'sidebar-controller';
+  sidebar.innerHTML = `
+    <div class="controller-box">
+      <div class="controller-header">
+        <h3 class="controller-title">Daftar Isi</h3>
+        <button class="controller-toggle">☰</button>
+      </div>
+      <div class="controller-content"></div>
+    </div>
+  `;
+  
+  // Add to document
+  document.body.appendChild(sidebar);
+  
+  // Populate with H1 sections
+  const h1Elements = document.querySelectorAll('h1:not(.main-title h1)');
+  const content = sidebar.querySelector('.controller-content');
+  let isManualScroll = false;
+  
+  h1Elements.forEach((h1, index) => {
+    if (!h1.id) h1.id = `section-${index}`;
+    
+    const item = document.createElement('div');
+    item.className = 'controller-item';
+    item.textContent = h1.textContent;
+    item.onclick = (e) => {
+      isManualScroll = true;
+      h1.scrollIntoView({ behavior: 'smooth' });
+      setActiveItem(item);
+      
+      // Reset manual scroll flag after animation completes
+      setTimeout(() => {
+        isManualScroll = false;
+      }, 1000);
+    };
+    
+    content.appendChild(item);
+  });
+  
+  // Function to set active item
+  function setActiveItem(activeItem) {
+    document.querySelectorAll('.controller-item').forEach(i => {
+      i.classList.remove('active');
+    });
+    activeItem.classList.add('active');
+  }
+  
+  // Improved scroll detection for active section
+  function handleScroll() {
+    if (isManualScroll) return;
+    
+    const scrollPosition = window.scrollY + window.innerHeight/3;
+    let closestSection = null;
+    let smallestDistance = Infinity;
+    
+    h1Elements.forEach((h1, index) => {
+      const item = content.children[index];
+      const h1Top = h1.offsetTop;
+      const h1Bottom = h1Top + h1.offsetHeight;
+      const distance = Math.abs(scrollPosition - h1Top);
+      
+      // Find the closest section to current scroll position
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        closestSection = item;
+      }
+    });
+    
+    if (closestSection) {
+      setActiveItem(closestSection);
+    }
+  }
+  
+  // Add scroll event listener with debounce
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(handleScroll, 100);
+  });
+  
+  // Initialize active item
+  handleScroll();
+  
+  // Modifikasi toggle function
+  const toggleBtn = sidebar.querySelector('.controller-toggle');
+  toggleBtn.onclick = () => {
+    sidebar.classList.toggle('minimized');
+    document.body.classList.toggle('sidebar-open');
+    
+    // Adjust position when minimized
+    if (sidebar.classList.contains('minimized')) {
+      document.body.style.marginRight = '50px';
+      toggleBtn.textContent = '☰'; // Tetap tampilkan garis tiga saat minimized
+    } else {
+      document.body.style.marginRight = '300px';
+      toggleBtn.textContent = '☰'; // Tetap tampilkan garis tiga saat expanded
+    }
+  };
+  
+  // Tambahkan styling khusus untuk ikon garis tiga
+  const style = document.createElement('style');
+  style.textContent = `
+    .controller-toggle {
+      font-size: 20px;
+      padding: 0 8px;
+      line-height: 1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: white;
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
